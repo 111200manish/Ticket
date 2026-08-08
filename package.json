@@ -1,0 +1,16 @@
+{
+  "name": "workdesk-backend",
+  "version": "1.0.0",
+  "description": "WorkDesk ticket management backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.13.1"
+  }
+}
