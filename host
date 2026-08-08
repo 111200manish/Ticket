@@ -1,0 +1,2116 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WorkDesk - Company Helpdesk</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+
+body{
+    font-family:Arial,Segoe UI,sans-serif;
+    background:#f4f6fa;
+    color:#182235;
+}
+
+.sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width:235px;
+    background:#111827;
+    color:#fff;
+    padding:25px 15px;
+}
+
+.logo{
+    font-size:23px;
+    font-weight:800;
+    margin:0 10px 35px;
+}
+
+.logo span{color:#6382ff}
+
+.menu-title{
+    color:#758198;
+    font-size:10px;
+    text-transform:uppercase;
+    margin:0 10px 10px;
+}
+
+.menu{
+    list-style:none;
+}
+
+.menu li{
+    padding:13px 12px;
+    margin:4px 0;
+    color:#a8b1c1;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:14px;
+}
+
+.menu li:hover,
+.menu li.active{
+    background:#202b40;
+    color:#fff;
+}
+
+.main{
+    margin-left:235px;
+    min-height:100vh;
+}
+
+.topbar{
+    height:70px;
+    background:#fff;
+    border-bottom:1px solid #e5e9f0;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:0 30px;
+}
+
+.search{
+    width:390px;
+}
+
+.search input{
+    width:100%;
+    border:1px solid #e1e6ef;
+    padding:11px 14px;
+    border-radius:8px;
+    outline:none;
+}
+
+.profile{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.avatar{
+    width:38px;
+    height:38px;
+    background:#e8edff;
+    color:#4164d8;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    font-weight:bold;
+}
+
+.profile small{
+    color:#8791a2;
+}
+
+.content{
+    padding:30px;
+}
+
+.page-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:24px;
+}
+
+.page-head h1{
+    font-size:25px;
+}
+
+.page-head p{
+    color:#8791a2;
+    font-size:13px;
+    margin-top:6px;
+}
+
+button{
+    cursor:pointer;
+}
+
+.primary{
+    border:0;
+    background:#3867f5;
+    color:white;
+    padding:11px 17px;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+.primary:hover{
+    background:#2e57d8;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+    margin-bottom:24px;
+}
+
+.stat{
+    background:white;
+    border:1px solid #e5e9f0;
+    border-radius:11px;
+    padding:20px;
+}
+
+.stat-label{
+    color:#8791a2;
+    font-size:12px;
+}
+
+.stat-number{
+    font-size:29px;
+    font-weight:800;
+    margin-top:10px;
+}
+
+.panel{
+    background:#fff;
+    border:1px solid #e5e9f0;
+    border-radius:11px;
+    overflow:hidden;
+}
+
+.panel-head{
+    padding:17px 20px;
+    border-bottom:1px solid #e5e9f0;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.panel-head h2{
+    font-size:16px;
+}
+
+.table-wrap{
+    overflow-x:auto;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+}
+
+th{
+    text-align:left;
+    padding:13px 18px;
+    background:#fafbfd;
+    color:#8791a2;
+    font-size:10px;
+    text-transform:uppercase;
+}
+
+td{
+    padding:15px 18px;
+    border-top:1px solid #e8ebf0;
+    font-size:12px;
+}
+
+.ticket-row{
+    cursor:pointer;
+}
+
+.ticket-row:hover td{
+    background:#f8faff;
+}
+
+.ticket-id{
+    color:#3867f5;
+    font-weight:bold;
+}
+
+.ticket-title{
+    font-weight:bold;
+}
+
+.ticket-sub{
+    color:#8791a2;
+    font-size:10px;
+    margin-top:4px;
+}
+
+.person{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
+
+.small-avatar{
+    width:29px;
+    height:29px;
+    background:#edf0f6;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    color:#59657a;
+    font-size:9px;
+    font-weight:bold;
+}
+
+.badge{
+    display:inline-block;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:10px;
+    font-weight:bold;
+}
+
+.open{background:#eef2ff;color:#3867f5}
+.progress{background:#fff5df;color:#d68b15}
+.pending{background:#f1edff;color:#7958d9}
+.resolved{background:#e8f8f2;color:#149866}
+.high{background:#fff0f1;color:#df4d5b}
+.medium{background:#fff5df;color:#d68b15}
+.low{background:#e8f8f2;color:#149866}
+
+.hidden{display:none!important}
+
+.filters{
+    display:flex;
+    gap:8px;
+}
+
+select{
+    border:1px solid #e1e6ef;
+    padding:8px 10px;
+    border-radius:7px;
+    background:#fff;
+    outline:none;
+}
+
+.detail-grid{
+    display:grid;
+    grid-template-columns:1.6fr .8fr;
+    gap:18px;
+}
+
+.detail-panel{
+    background:#fff;
+    border:1px solid #e5e9f0;
+    border-radius:11px;
+    padding:22px;
+    margin-bottom:18px;
+}
+
+.back{
+    border:0;
+    background:none;
+    color:#3867f5;
+    margin-bottom:18px;
+    font-weight:bold;
+}
+
+.detail-id{
+    color:#3867f5;
+    font-size:12px;
+    font-weight:bold;
+}
+
+.detail-title{
+    font-size:21px;
+    font-weight:bold;
+    margin-top:6px;
+}
+
+.problem{
+    margin-top:20px;
+    padding-top:18px;
+    border-top:1px solid #e5e9f0;
+    color:#5d687b;
+    line-height:1.7;
+    font-size:13px;
+}
+
+.info-row{
+    display:flex;
+    justify-content:space-between;
+    padding:13px 0;
+    border-bottom:1px solid #e5e9f0;
+    font-size:12px;
+}
+
+.info-row:last-child{
+    border:0;
+}
+
+.info-row span:first-child{
+    color:#8791a2;
+}
+
+.comments{
+    margin-top:10px;
+}
+
+.comment{
+    display:flex;
+    gap:10px;
+    padding:15px 0;
+    border-bottom:1px solid #e5e9f0;
+}
+
+.comment-avatar{
+    width:34px;
+    height:34px;
+    border-radius:50%;
+    background:#e8edff;
+    color:#4164d8;
+    display:grid;
+    place-items:center;
+    font-size:10px;
+    font-weight:bold;
+    flex-shrink:0;
+}
+
+.comment-name{
+    font-weight:bold;
+    font-size:12px;
+}
+
+.comment-text{
+    margin-top:5px;
+    color:#5d687b;
+    font-size:12px;
+    line-height:1.5;
+}
+
+textarea{
+    width:100%;
+    min-height:90px;
+    resize:vertical;
+    border:1px solid #e1e6ef;
+    border-radius:8px;
+    padding:12px;
+    outline:none;
+    font-family:inherit;
+    margin-top:15px;
+}
+
+.reply{
+    text-align:right;
+    margin-top:8px;
+}
+
+.modal-bg{
+    position:fixed;
+    inset:0;
+    background:rgba(15,23,42,.5);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:100;
+}
+
+.modal{
+    background:#fff;
+    width:500px;
+    max-width:calc(100% - 25px);
+    border-radius:12px;
+    padding:24px;
+}
+
+.modal-head{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+
+.close{
+    border:0;
+    background:none;
+    font-size:24px;
+}
+
+.form-group{
+    margin-bottom:14px;
+}
+
+.form-group label{
+    display:block;
+    font-size:11px;
+    font-weight:bold;
+    margin-bottom:6px;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+    margin:0;
+    width:100%;
+    border:1px solid #e1e6ef;
+    padding:10px;
+    border-radius:7px;
+}
+
+.modal-actions{
+    display:flex;
+    justify-content:flex-end;
+    gap:8px;
+    margin-top:18px;
+}
+
+.cancel{
+    border:1px solid #e1e6ef;
+    background:#fff;
+    padding:10px 15px;
+    border-radius:7px;
+}
+
+.toast{
+    position:fixed;
+    right:25px;
+    bottom:25px;
+    background:#172033;
+    color:#fff;
+    padding:13px 18px;
+    border-radius:8px;
+    opacity:0;
+    transform:translateY(20px);
+    transition:.25s;
+    z-index:200;
+    font-size:12px;
+}
+
+.toast.show{
+    opacity:1;
+    transform:translateY(0);
+}
+
+@media(max-width:1000px){
+    .stats{grid-template-columns:repeat(2,1fr)}
+    .detail-grid{grid-template-columns:1fr}
+}
+
+@media(max-width:700px){
+    .sidebar{
+        position:static;
+        width:100%;
+    }
+
+    .main{
+        margin-left:0;
+    }
+
+    .menu{
+        display:flex;
+        overflow:auto;
+    }
+
+    .menu li{
+        white-space:nowrap;
+    }
+
+    .topbar{
+        padding:0 15px;
+    }
+
+    .search{
+        width:55%;
+    }
+
+    .content{
+        padding:18px;
+    }
+
+    .stats{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+
+<aside class="sidebar">
+
+Gemscab Industris Limited
+<div class="logo">
+    Work<span>Desk</span>
+</div>
+
+<div class="menu-title">Company Workspace</div>
+
+<ul class="menu">
+
+    <li class="active" onclick="showPage('dashboard',this)">
+         &nbsp; Dashboard
+    </li>
+
+    <li onclick="showPage('all',this)">
+         &nbsp; All Tickets
+    </li>
+
+    <li onclick="showPage('my',this)">
+         &nbsp; My Tickets
+    </li>
+
+    <li onclick="showPage('open',this)">
+         &nbsp; Open
+    </li>
+
+    <li onclick="showPage('progress',this)">
+         &nbsp; In Progress
+    </li>
+
+    <li onclick="showPage('pending',this)">
+         &nbsp; Pending
+    </li>
+
+    <li onclick="showPage('resolved',this)">
+         &nbsp; Resolved
+    </li>
+
+</ul>
+
+
+</aside>
+
+<main class="main">
+
+<!-- TOPBAR -->
+
+<header class="topbar">
+
+Gemscab Industries Limited
+<div class="search">
+    <input
+        id="search"
+        placeholder="Search tickets..."
+        oninput="renderAll()"
+    >
+</div>
+
+<div class="profile">
+
+    <div class="avatar">RK</div>
+
+    <div>
+        <strong>Manish Kumar</strong><br>
+        <small>IT Support Admin</small>
+    </div>
+
+</div>
+Gemscab Industries Limited
+
+</header>
+
+<!-- ================= DASHBOARD ================= -->
+
+<section class="content page" id="dashboard">
+
+Gemscab Industries Limited
+<div class="page-head">
+
+    <div>
+        <h1>Ticket Dashboard</h1>
+        <p>Company support requests overview.</p>
+    </div>
+
+    <button class="primary" onclick="openModal()">
+        + New Ticket
+    </button>
+
+</div>
+
+
+<div class="stats">
+
+    <div class="stat">
+        <div class="stat-label">Open Tickets</div>
+        <div class="stat-number" id="countOpen">0</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-label">In Progress</div>
+        <div class="stat-number" id="countProgress">0</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-label">Pending</div>
+        <div class="stat-number" id="countPending">0</div>
+    </div>
+
+    <div class="stat">
+        <div class="stat-label">Resolved</div>
+        <div class="stat-number" id="countResolved">0</div>
+    </div>
+
+</div>
+
+
+<div class="panel">
+
+    <div class="panel-head">
+        <h2>Recent Tickets</h2>
+    </div>
+
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>User</th>
+                    <th>Subject</th>
+                    <th>Department</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody id="dashboardTable"></tbody>
+        </table>
+    </div>
+
+</div>
+Gemscab Industries Limited
+
+</section>
+
+<!-- ================= ALL TICKETS ================= -->
+
+<section class="content page hidden" id="all">
+
+
+<div class="page-head">
+
+    <div>
+        <h1>All Tickets</h1>
+        <p>All company support requests.</p>
+    </div>
+
+    <button class="primary" onclick="openModal()">
+        + New Ticket
+    </button>
+
+</div>
+
+
+<div class="panel">
+
+    <div class="panel-head">
+
+        <h2>All Tickets</h2>
+
+        <div class="filters">
+
+            <select id="allStatus" onchange="renderAll()">
+                <option value="all">All Status</option>
+                <option>Open</option>
+                <option>In Progress</option>
+                <option>Pending</option>
+                <option>Resolved</option>
+            </select>
+
+            <select id="allPriority" onchange="renderAll()">
+                <option value="all">All Priority</option>
+                <option>High</option>
+                <option>Medium</option>
+                <option>Low</option>
+            </select>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>User Name</th>
+                    <th>Subject</th>
+                    <th>Problem</th>
+                    <th>Department</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody id="allTable"></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+Gemscab Industries Limited
+
+</section>
+
+<!-- ================= MY TICKETS ================= -->
+
+<section class="content page hidden" id="my">
+
+Gemscab Industries Limited
+<div class="page-head">
+
+    <div>
+        <h1>My Tickets</h1>
+        <p>Tickets assigned to Manish Kumar.</p>
+    </div>
+
+</div>
+
+
+<div class="panel">
+
+    <div class="panel-head">
+        <h2>My Active Tickets</h2>
+    </div>
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>User</th>
+                    <th>Subject</th>
+                    <th>Problem</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody id="myTable"></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+Gemscab Industries Limited
+
+</section>
+
+<!-- ================= STATUS PAGES ================= -->
+
+<section class="content page hidden" id="open">
+
+<div class="page-head">
+    <div>
+        <h1>Open Tickets</h1>
+        <p>Tickets waiting to be handled.</p>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Subject</th>
+                    <th>Problem</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="openTable"></tbody>
+        </table>
+    </div>
+</div>
+
+
+</section>
+
+<section class="content page hidden" id="progress">
+
+
+<div class="page-head">
+    <div>
+        <h1>In Progress</h1>
+        <p>Tickets currently being handled.</p>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Subject</th>
+                    <th>Problem</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="progressTable"></tbody>
+        </table>
+    </div>
+</div>
+
+
+</section>
+
+<section class="content page hidden" id="pending">
+
+
+<div class="page-head">
+    <div>
+        <h1>Pending Tickets</h1>
+        <p>Tickets waiting for a response.</p>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="table-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>User</th>
+                    <th>Subject</th>
+                    <th>Problem</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="pendingTable"></tbody>
+        </table>
+    </div>
+</div>
+```
+
+</section>
+
+<!-- ================= RESOLVED ================= -->
+
+<section class="content page hidden" id="resolved">
+
+
+<div class="page-head">
+
+    <div>
+        <h1>Resolved Tickets</h1>
+        <p>Successfully completed support requests.</p>
+    </div>
+
+</div>
+
+
+<div class="panel">
+
+    <div class="panel-head">
+        <h2>Resolved Tickets</h2>
+
+        <span class="badge resolved">
+            Completed
+        </span>
+    </div>
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Request ID</th>
+                    <th>User</th>
+                    <th>Subject</th>
+                    <th>Problem</th>
+                    <th>Department</th>
+                    <th>Priority</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+
+            <tbody id="resolvedTable"></tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+</section>
+
+<!-- ================= TICKET DETAILS ================= -->
+
+<section class="content page hidden" id="details">
+
+```
+<button class="back" onclick="backToAll()">
+    ? Back to Tickets
+</button>
+
+<div class="page-head">
+
+    <div>
+
+        <div class="detail-id" id="detailId">
+            #REQ-0000
+        </div>
+
+        <div class="detail-title" id="detailTitle">
+            Ticket
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="detail-grid">
+
+    <div>
+
+        <div class="detail-panel">
+
+            <h3>Problem Description</h3>
+
+            <div class="problem" id="detailProblem">
+            </div>
+
+        </div>
+
+
+        <div class="detail-panel comments">
+
+            <h3>Conversation</h3>
+
+            <div id="comments"></div>
+
+            <textarea
+                id="replyText"
+                placeholder="Write a reply..."
+            ></textarea>
+
+            <div class="reply">
+
+                <button
+                    class="primary"
+                    onclick="sendReply()"
+                >
+                    Send Reply
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div>
+
+        <div class="detail-panel">
+
+            <h3>Ticket Information</h3>
+
+            <div class="info-row">
+                <span>Requester</span>
+                <strong id="detailUser"></strong>
+            </div>
+
+            <div class="info-row">
+                <span>Department</span>
+                <strong id="detailDepartment"></strong>
+            </div>
+
+            <div class="info-row">
+                <span>Priority</span>
+
+                <select id="detailPriority"
+                        onchange="updateCurrentTicket()">
+                    <option>High</option>
+                    <option>Medium</option>
+                    <option>Low</option>
+                </select>
+            </div>
+
+            <div class="info-row">
+                <span>Status</span>
+
+                <select id="detailStatus"
+                        onchange="updateCurrentTicket()">
+                    <option>Open</option>
+                    <option>In Progress</option>
+                    <option>Pending</option>
+                    <option>Resolved</option>
+                </select>
+            </div>
+
+            <div class="info-row">
+                <span>Assigned To</span>
+
+                <select id="detailAssignee"
+                        onchange="updateCurrentTicket()">
+                    <option>Rahul</option>
+                    <option>Priya</option>
+                    <option>Amit</option>
+                    <option>Unassigned</option>
+                </select>
+            </div>
+
+        </div>
+
+
+        <div class="detail-panel">
+
+            <h3>Quick Action</h3>
+
+            <button
+                class="primary"
+                style="width:100%;margin-top:15px"
+                onclick="markResolved()"
+            >
+                ? Mark as Resolved
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+</section>
+
+</main>
+
+<!-- ================= NEW TICKET MODAL ================= -->
+
+<div class="modal-bg" id="modal">
+
+
+<div class="modal">
+
+    <div class="modal-head">
+
+        <h2>Create New Ticket</h2>
+
+        <button
+            class="close"
+            onclick="closeModal()"
+        >
+            ×
+        </button>
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>User Name</label>
+
+        <input
+            id="newUser"
+            placeholder="Employee name"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>Subject</label>
+
+        <input
+            id="newSubject"
+            placeholder="Ticket subject"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>Problem</label>
+
+        <textarea
+            id="newProblem"
+            placeholder="Describe the problem..."
+        ></textarea>
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>Department</label>
+
+        <select id="newDepartment">
+            <option>IT</option>
+            <option>Finance</option>
+            <option>HR</option>
+            <option>Sales</option>
+            <option>Accounts</option>
+            <option>Operations</option>
+        </select>
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label>Priority</label>
+
+        <select id="newPriority">
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+        </select>
+
+    </div>
+
+
+    <div class="modal-actions">
+
+        <button
+            class="cancel"
+            onclick="closeModal()"
+        >
+            Cancel
+        </button>
+
+        <button
+            class="primary"
+            onclick="createTicket()"
+        >
+            Create Ticket
+        </button>
+
+    </div>
+
+</div>
+
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+/* =========================================
+   TICKET DATABASE
+========================================= */
+
+let tickets = JSON.parse(
+    localStorage.getItem("workdesk_tickets")
+) || {
+
+    26001:{
+        id:"#REQ-26001",
+        user:"Ankit Sharma",
+        subject:"Wi-Fi Connection Issue",
+        problem:"Laptop office Wi-Fi se connect nahi ho raha.",
+        department:"Finance",
+        priority:"High",
+        status:"Open",
+        assignee:"Priya",
+        comments:[]
+    },
+
+    26002:{
+        id:"#REQ-26002",
+        user:"Neha Patel",
+        subject:"Accounting Software",
+        problem:"New accounting software install karwana hai.",
+        department:"Accounts",
+        priority:"Medium",
+        status:"In Progress",
+        assignee:"Rahul",
+        comments:[]
+    },
+
+    26003:{
+        id:"#REQ-26003",
+        user:"Vikram Kumar",
+        subject:"New Employee Email",
+        problem:"New employee ke liye company email banana hai.",
+        department:"HR",
+        priority:"Low",
+        status:"Pending",
+        assignee:"Amit",
+        comments:[]
+    },
+
+    26004:{
+        id:"#REQ-26004",
+        user:"Riya Mehta",
+        subject:"Printer Not Working",
+        problem:"Second floor printer print nahi kar raha.",
+        department:"Operations",
+        priority:"Medium",
+        status:"Resolved",
+        assignee:"Priya",
+        comments:[]
+    },
+
+    26005:{
+        id:"#REQ-26005",
+        user:"Suresh Kumar",
+        subject:"VPN Access Required",
+        problem:"Remote work ke liye VPN access chahiye.",
+        department:"Sales",
+        priority:"High",
+        status:"Open",
+        assignee:"Rahul",
+        comments:[]
+    }
+
+};
+
+
+let currentTicket = null;
+
+
+/* =========================================
+   SAVE
+========================================= */
+
+function saveTickets(){
+
+    localStorage.setItem(
+        "workdesk_tickets",
+        JSON.stringify(tickets)
+    );
+
+}
+
+
+/* =========================================
+   PAGE NAVIGATION
+========================================= */
+
+function showPage(page,element){
+
+    document
+        .querySelectorAll(".page")
+        .forEach(p=>p.classList.add("hidden"));
+
+    document
+        .getElementById(page)
+        .classList.remove("hidden");
+
+    document
+        .querySelectorAll(".menu li")
+        .forEach(li=>li.classList.remove("active"));
+
+    if(element){
+        element.classList.add("active");
+    }
+
+    renderAll();
+
+}
+
+
+/* =========================================
+   RENDER EVERYTHING
+========================================= */
+
+function renderAll(){
+
+    renderDashboard();
+
+    renderAllTickets();
+
+    renderMyTickets();
+
+    renderStatus("Open","openTable");
+
+    renderStatus("In Progress","progressTable");
+
+    renderStatus("Pending","pendingTable");
+
+    renderStatus("Resolved","resolvedTable");
+
+    updateCounters();
+
+}
+
+
+/* =========================================
+   FILTER SEARCH
+========================================= */
+
+function matchesSearch(ticket){
+
+    const input =
+        document.getElementById("search");
+
+    if(!input) return true;
+
+    const search =
+        input.value.toLowerCase().trim();
+
+    if(!search) return true;
+
+    return (
+
+        ticket.id.toLowerCase().includes(search) ||
+        ticket.user.toLowerCase().includes(search) ||
+        ticket.subject.toLowerCase().includes(search) ||
+        ticket.problem.toLowerCase().includes(search) ||
+        ticket.department.toLowerCase().includes(search)
+
+    );
+
+}
+
+
+/* =========================================
+   ROW CREATOR
+========================================= */
+
+function createRow(ticket,full=false){
+
+    const tr =
+        document.createElement("tr");
+
+    tr.className="ticket-row";
+
+    tr.onclick=()=>{
+        openTicket(ticket.id);
+    };
+
+
+    const initials =
+        ticket.user
+        .split(" ")
+        .map(x=>x[0])
+        .join("")
+        .substring(0,2)
+        .toUpperCase();
+
+
+    const priorityClass =
+        ticket.priority==="High"
+        ?"high"
+        :ticket.priority==="Medium"
+        ?"medium"
+        :"low";
+
+
+    const statusClass =
+        ticket.status==="Open"
+        ?"open"
+        :ticket.status==="In Progress"
+        ?"progress"
+        :ticket.status==="Pending"
+        ?"pending"
+        :"resolved";
+
+
+    if(full){
+
+        tr.innerHTML=`
+
+        <td class="ticket-id">${esc(ticket.id)}</td>
+
+        <td>
+            <div class="person">
+                <div class="small-avatar">
+                    ${esc(initials)}
+                </div>
+                ${esc(ticket.user)}
+            </div>
+        </td>
+
+        <td class="ticket-title">
+            ${esc(ticket.subject)}
+        </td>
+
+        <td>
+            ${esc(ticket.problem)}
+        </td>
+
+        <td>${esc(ticket.department)}</td>
+
+        <td>
+            <span class="badge ${priorityClass}">
+                ${esc(ticket.priority)}
+            </span>
+        </td>
+
+        <td>
+            <span class="badge ${statusClass}">
+                ${esc(ticket.status)}
+            </span>
+        </td>
+
+        `;
+
+    }else{
+
+        tr.innerHTML=`
+
+        <td class="ticket-id">${esc(ticket.id)}</td>
+
+        <td>
+            <div class="person">
+                <div class="small-avatar">
+                    ${esc(initials)}
+                </div>
+                ${esc(ticket.user)}
+            </div>
+        </td>
+
+        <td class="ticket-title">
+            ${esc(ticket.subject)}
+        </td>
+
+        <td>
+            ${esc(ticket.problem)}
+        </td>
+
+        <td>
+            <span class="badge ${priorityClass}">
+                ${esc(ticket.priority)}
+            </span>
+        </td>
+
+        <td>
+            <span class="badge ${statusClass}">
+                ${esc(ticket.status)}
+            </span>
+        </td>
+
+        `;
+
+    }
+
+    return tr;
+
+}
+
+
+/* =========================================
+   DASHBOARD
+========================================= */
+
+function renderDashboard(){
+
+    const tbody =
+        document.getElementById("dashboardTable");
+
+    if(!tbody) return;
+
+    tbody.innerHTML="";
+
+    Object.values(tickets)
+        .slice(-8)
+        .reverse()
+        .forEach(ticket=>{
+
+            if(matchesSearch(ticket)){
+
+                tbody.appendChild(
+                    createRow(ticket)
+                );
+
+            }
+
+        });
+
+}
+
+
+/* =========================================
+   ALL TICKETS
+========================================= */
+
+function renderAllTickets(){
+
+    const tbody =
+        document.getElementById("allTable");
+
+    if(!tbody) return;
+
+    tbody.innerHTML="";
+
+    const status =
+        document.getElementById("allStatus")?.value
+        || "all";
+
+    const priority =
+        document.getElementById("allPriority")?.value
+        || "all";
+
+
+    Object.values(tickets).forEach(ticket=>{
+
+        if(!matchesSearch(ticket)) return;
+
+        if(
+            status!=="all" &&
+            ticket.status!==status
+        ) return;
+
+        if(
+            priority!=="all" &&
+            ticket.priority!==priority
+        ) return;
+
+
+        tbody.appendChild(
+            createRow(ticket,true)
+        );
+
+    });
+
+}
+
+
+/* =========================================
+   MY TICKETS
+========================================= */
+
+function renderMyTickets(){
+
+    const tbody =
+        document.getElementById("myTable");
+
+    if(!tbody) return;
+
+    tbody.innerHTML="";
+
+
+    Object.values(tickets).forEach(ticket=>{
+
+        /*
+            IMPORTANT:
+            Resolved tickets My Tickets mein nahi.
+        */
+
+        if(ticket.assignee!=="Rahul") return;
+
+        if(ticket.status==="Resolved") return;
+
+        if(!matchesSearch(ticket)) return;
+
+
+        tbody.appendChild(
+            createRow(ticket)
+        );
+
+    });
+
+}
+
+
+/* =========================================
+   STATUS LIST
+========================================= */
+
+function renderStatus(status,id){
+
+    const tbody =
+        document.getElementById(id);
+
+    if(!tbody) return;
+
+    tbody.innerHTML="";
+
+
+    Object.values(tickets).forEach(ticket=>{
+
+        if(ticket.status!==status) return;
+
+        if(!matchesSearch(ticket)) return;
+
+        tbody.appendChild(
+            createRow(ticket)
+        );
+
+    });
+
+}
+
+
+/* =========================================
+   COUNTERS
+========================================= */
+
+function updateCounters(){
+
+    const values =
+        Object.values(tickets);
+
+    document.getElementById("countOpen")
+        .textContent =
+        values.filter(x=>x.status==="Open").length;
+
+    document.getElementById("countProgress")
+        .textContent =
+        values.filter(x=>x.status==="In Progress").length;
+
+    document.getElementById("countPending")
+        .textContent =
+        values.filter(x=>x.status==="Pending").length;
+
+    document.getElementById("countResolved")
+        .textContent =
+        values.filter(x=>x.status==="Resolved").length;
+
+}
+
+
+/* =========================================
+   OPEN TICKET
+========================================= */
+
+function openTicket(id){
+
+    const numeric =
+        parseInt(
+            String(id).replace(/\D/g,"")
+        );
+
+    const ticket =
+        tickets[numeric];
+
+    if(!ticket){
+
+        showToast("Ticket not found");
+
+        return;
+
+    }
+
+
+    currentTicket=numeric;
+
+
+    document
+        .querySelectorAll(".page")
+        .forEach(p=>p.classList.add("hidden"));
+
+
+    document
+        .getElementById("details")
+        .classList.remove("hidden");
+
+
+    document.getElementById("detailId")
+        .textContent=ticket.id;
+
+    document.getElementById("detailTitle")
+        .textContent=ticket.subject;
+
+    document.getElementById("detailProblem")
+        .textContent=ticket.problem;
+
+    document.getElementById("detailUser")
+        .textContent=ticket.user;
+
+    document.getElementById("detailDepartment")
+        .textContent=ticket.department;
+
+    document.getElementById("detailPriority")
+        .value=ticket.priority;
+
+    document.getElementById("detailStatus")
+        .value=ticket.status;
+
+    document.getElementById("detailAssignee")
+        .value=ticket.assignee;
+
+
+    renderComments(ticket);
+
+}
+
+
+/* =========================================
+   UPDATE CURRENT TICKET
+========================================= */
+
+function updateCurrentTicket(){
+
+    if(currentTicket===null) return;
+
+
+    const ticket =
+        tickets[currentTicket];
+
+
+    ticket.priority =
+        document.getElementById(
+            "detailPriority"
+        ).value;
+
+
+    ticket.assignee =
+        document.getElementById(
+            "detailAssignee"
+        ).value;
+
+
+    const newStatus =
+        document.getElementById(
+            "detailStatus"
+        ).value;
+
+
+    ticket.status=newStatus;
+
+
+    saveTickets();
+
+    renderAll();
+
+    showToast(
+        `${ticket.id} status updated to ${newStatus}`
+    );
+
+}
+
+
+/* =========================================
+   MARK RESOLVED
+========================================= */
+
+function markResolved(){
+
+    if(currentTicket===null) return;
+
+
+    tickets[currentTicket].status="Resolved";
+
+
+    document.getElementById(
+        "detailStatus"
+    ).value="Resolved";
+
+
+    saveTickets();
+
+    renderAll();
+
+    showToast(
+        "Ticket moved to Resolved"
+    );
+
+}
+
+
+/* =========================================
+   BACK
+========================================= */
+
+function backToAll(){
+
+    showPage("all",null);
+
+}
+
+
+/* =========================================
+   COMMENTS
+========================================= */
+
+function renderComments(ticket){
+
+    const box =
+        document.getElementById("comments");
+
+    box.innerHTML="";
+
+
+    if(!ticket.comments ||
+       ticket.comments.length===0){
+
+        box.innerHTML=`
+            <div style="
+                color:#8791a2;
+                font-size:12px;
+                padding:15px 0;
+            ">
+                No comments yet.
+            </div>
+        `;
+
+        return;
+
+    }
+
+
+    ticket.comments.forEach(comment=>{
+
+        const div =
+            document.createElement("div");
+
+        div.className="comment";
+
+        div.innerHTML=`
+
+            <div class="comment-avatar">
+                ${esc(comment.initials)}
+            </div>
+
+            <div>
+
+                <div class="comment-name">
+                    ${esc(comment.name)}
+                </div>
+
+                <div class="comment-text">
+                    ${esc(comment.text)}
+                </div>
+
+            </div>
+        `;
+
+        box.appendChild(div);
+
+    });
+
+}
+
+
+/* =========================================
+   SEND REPLY
+========================================= */
+
+function sendReply(){
+
+    if(currentTicket===null) return;
+
+
+    const textarea =
+        document.getElementById("replyText");
+
+
+    const text =
+        textarea.value.trim();
+
+
+    if(!text){
+
+        showToast(
+            "Please write a reply first"
+        );
+
+        return;
+
+    }
+
+
+    if(!tickets[currentTicket].comments){
+
+        tickets[currentTicket].comments=[];
+
+    }
+
+
+    tickets[currentTicket].comments.push({
+
+        name:"Manish Kumar",
+
+        initials:"RK",
+
+        text:text
+
+    });
+
+
+    textarea.value="";
+
+
+    saveTickets();
+
+    renderComments(
+        tickets[currentTicket]
+    );
+
+
+    showToast("Reply added successfully");
+
+}
+
+
+/* =========================================
+   NEW TICKET
+========================================= */
+
+function openModal(){
+
+    document.getElementById(
+        "modal"
+    ).style.display="flex";
+
+}
+
+
+function closeModal(){
+
+    document.getElementById(
+        "modal"
+    ).style.display="none";
+
+}
+
+
+function createTicket(){
+
+    const user =
+        document.getElementById(
+            "newUser"
+        ).value.trim();
+
+
+    const subject =
+        document.getElementById(
+            "newSubject"
+        ).value.trim();
+
+
+    const problem =
+        document.getElementById(
+            "newProblem"
+        ).value.trim();
+
+
+    const department =
+        document.getElementById(
+            "newDepartment"
+        ).value;
+
+
+    const priority =
+        document.getElementById(
+            "newPriority"
+        ).value;
+
+
+    if(!user || !subject || !problem){
+
+        showToast(
+            "Please fill all fields"
+        );
+
+        return;
+
+    }
+
+
+    const ids =
+        Object.keys(tickets)
+        .map(Number);
+
+
+    const id =
+        Math.max(...ids)+1;
+
+
+    tickets[id]={
+
+        id:"#REQ-"+id,
+
+        user:user,
+
+        subject:subject,
+
+        problem:problem,
+
+        department:department,
+
+        priority:priority,
+
+        status:"Open",
+
+        assignee:"Rahul",
+
+        comments:[]
+
+    };
+
+
+    saveTickets();
+
+    closeModal();
+
+    document.getElementById(
+        "newUser"
+    ).value="";
+
+    document.getElementById(
+        "newSubject"
+    ).value="";
+
+    document.getElementById(
+        "newProblem"
+    ).value="";
+
+
+    renderAll();
+
+
+    showToast(
+        "New ticket created successfully"
+    );
+
+}
+
+
+/* =========================================
+   ESCAPE HTML
+========================================= */
+
+function esc(value){
+
+    const div =
+        document.createElement("div");
+
+    div.textContent =
+        String(value ?? "");
+
+    return div.innerHTML;
+
+}
+
+
+/* =========================================
+   TOAST
+========================================= */
+
+function showToast(message){
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.textContent=message;
+
+    toast.classList.add("show");
+
+
+    setTimeout(()=>{
+
+        toast.classList.remove("show");
+
+    },2500);
+
+}
+
+
+/* =========================================
+   INITIALIZE
+========================================= */
+
+renderAll();
+
+</script>
+
+</body>
+</html>
