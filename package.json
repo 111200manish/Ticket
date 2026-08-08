@@ -1,7 +1,8 @@
+```json
 {
-  "name": "workdesk-backend",
+  "name": "gemscab-workdesk",
   "version": "1.0.0",
-  "description": "WorkDesk ticket management backend",
+  "private": true,
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
@@ -14,3 +15,4 @@
     "pg": "^8.13.1"
   }
 }
+```
